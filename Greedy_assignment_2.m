@@ -11,13 +11,13 @@ for t=1:tot
         % edges for trips of size 2
         if (RTV_Adj(N+v,N+num_v+t)==1) && (T(t).size==2) && (kk~=0)
             a = a+1;
-            e2(a,:) = [cost_edge(v,t) v t T(t).r1 T(t).r2];
+            e2(a,:) = [cost_edge(v,t) v t T(t).r1 T(t).r2 T(t).pass];
 %             e2(a,:) = [c_t_edge(v,t) v t T(t).r1 T(t).r2]; % when cost is measured as delay on the arrival
         end
         % edges for trips of size 1
         if (RTV_Adj(N+v,N+num_v+t)==1) && (T(t).size==1)
             b = b+1;
-            e1(b,:) = [cost_edge(v,t) v t T(t).r1];
+            e1(b,:) = [cost_edge(v,t) v t T(t).r1 0 T(t).pass];
 %             e1(b,:) = [c_t_edge(v,t) v t T(t).r1]; % when cost is measured as delay on the arrival
         end
     end

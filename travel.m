@@ -9,7 +9,8 @@ function [value] = travel(V,R)
     global Delta;
     v_pos = [V.x;V.y];
     R_orgn = [R.xo;R.yo];
-    if tt(v_pos,R_orgn)<=(R.st+Delta);
+    
+    if tt(v_pos,R_orgn)<=(R.st+Delta) && R.pass <= V.c
         value = 1;
     else
         value = 0;

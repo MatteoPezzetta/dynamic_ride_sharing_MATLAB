@@ -36,45 +36,58 @@
 % is the only difference.
 
 
-function [value,cost,c_t_1,c_t_2] = travel2(V,R1,R2,KoL)
+function [value,cost,c_t_1,c_t_2,pass] = travel2(V,R1,R2,KoL)
     global Delta;
-    v_pos = [V.x;V.y];
-    R1_orgn = [R1.xo;R1.yo];
-    R1_dest = [R1.xd;R1.yd];
-    R2_orgn = [R2.xo;R2.yo];
-    R2_dest = [R2.xd;R2.yd];
     
-    switch KoL
-        case 1
-            if (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R1_dest)<=R1.at+Delta)...
-                    && (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R1_dest)+tt(R1_dest,R2_dest)<=R2.at+Delta)...
-                    && (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)<=R2.st+Delta)
-                value = 1;
-                cost1 = tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R1_dest); % cost on reaching destination R1
-                cost2 = cost1+tt(R1_dest,R2_dest); % cost of reaching destionation of R2
-                cost = cost2;
-                c_t_1 = cost1-R1.at; % delay on reaching destination 1
-                c_t_2 = cost2-R2.at; % delay on reaching destionation 2
-            else
-                value = 0;
-                cost = 0;
-                c_t_1 = 0;
-                c_t_2 = 0;
-            end
-        case 2
-            if (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R2_dest)<=R2.at+Delta)...
-                    && (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R2_dest)+tt(R2_dest,R1_dest)<=R1.at+Delta)...
-                    && (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)<=R2.st+Delta)
-                value = 1;
-                cost2 = tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R2_dest); % time taken to reach destination of R2
-                cost1 = cost2+tt(R2_dest,R1_dest); % time taken to reach destination of 1
-                cost = cost1;
-                c_t_2 = cost2-R2.at; % delay on destination 2
-                c_t_1 = cost1-R1.at; % delaty on destination 1
-            else
-                value = 0;
-                cost = 0;
-                c_t_2 = 0;
-                c_t_1 = 0;
-            end     
-end
+    pass = R1.pass+R2.pass;
+    
+    if pass <= V.c
+    
+        v_pos = [V.x;V.y];
+        R1_orgn = [R1.xo;R1.yo];
+        R1_dest = [R1.xd;R1.yd];
+        R2_orgn = [R2.xo;R2.yo];
+        R2_dest = [R2.xd;R2.yd];
+    
+        
+        switch KoL
+            case 1
+                if (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R1_dest)<=R1.at+Delta)...
+                        && (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R1_dest)+tt(R1_dest,R2_dest)<=R2.at+Delta)...
+                        && (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)<=R2.st+Delta)
+                    value = 1;
+                    cost1 = tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R1_dest); % cost on reaching destination R1
+                    cost2 = cost1+tt(R1_dest,R2_dest); % cost of reaching destionation of R2
+                    cost = cost2;
+                    c_t_1 = cost1-R1.at; % delay on reaching destination 1
+                    c_t_2 = cost2-R2.at; % delay on reaching destionation 2
+                else
+                    value = 0;
+                    cost = 0;
+                    c_t_1 = 0;
+                    c_t_2 = 0;
+                end
+            case 2
+                if (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R2_dest)<=R2.at+Delta)...
+                        && (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R2_dest)+tt(R2_dest,R1_dest)<=R1.at+Delta)...
+                        && (tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)<=R2.st+Delta)
+                    value = 1;
+                    cost2 = tt(v_pos,R1_orgn)+tt(R1_orgn,R2_orgn)+tt(R2_orgn,R2_dest); % time taken to reach destination of R2
+                    cost1 = cost2+tt(R2_dest,R1_dest); % time taken to reach destination of 1
+                    cost = cost1;
+                    c_t_2 = cost2-R2.at; % delay on destination 2
+                    c_t_1 = cost1-R1.at; % delaty on destination 1
+                else
+                    value = 0;
+                    cost = 0;
+                    c_t_2 = 0;
+                    c_t_1 = 0;
+                end     
+        end
+                    
+    else
+        value = 0;
+        cost = 0;
+        c_t_2 = 0;
+        c_t_1 = 0;
+    end

@@ -1,10 +1,10 @@
 % PREPARING DATA FOR OPTIMAL ASSIGNMENT
 
 if kk~=0 % distinction between the cases in which there are/aren't trips of size 2
-    e = [e1_save zeros(length(e1_save),1); e2_save];
+    e = [e1_save; e2_save];
     c_i_j = [e1_save(:,1); e2_save(:,1)];
 else
-    e = [e1_save zeros(length(e1_save),1)];
+    e = e1_save;
     c_i_j = [e1_save(:,1)];
 end
 
@@ -71,10 +71,10 @@ opt_ass = cast(opt_ass,'single');
 % toc
 
 % set of assigned requests
-R_OK = [opt_ass*[0 0 0 1 0]'; opt_ass*[0 0 0 0 1]'];
+R_OK = [opt_ass*[0 0 0 1 0 0]'; opt_ass*[0 0 0 0 1 0]'];
 R_OK = R_OK(any(R_OK,2),:);
 % set of assigned vehicles
-V_OK = opt_ass*[0 1 0 0 0]';
+V_OK = opt_ass*[0 1 0 0 0 0]';
 
 % number of assigned requests and number of assigned vehicles
 L_R_OK = length(R_OK);

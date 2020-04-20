@@ -52,6 +52,7 @@ for v=1:num_v % for each vehicle do:
             T(tot).r2 = 0;
             T(tot).order = 0;
             T(tot).size = 1;
+            T(tot).pass = R(index).pass;
             cost_edge(v,tot) = cost; % we save the travel cost of the edge
             c_t_edge(v,tot) = c_t; % cost in terms of delay on expected arrival
             T(tot).status = 0;
@@ -78,7 +79,7 @@ for v=1:num_v % for each vehicle do:
                 if (index1~=index2) && (Real_Adj(index1,index2)==1) % Explained in the Adj file
                     
                     % check for feasibility of the trip
-                    [value,cost,c_t_1,c_t_2] = travel2(V(v),R(index1),R(index2),Kind_of_link(index1,index2));
+                    [value,cost,c_t_1,c_t_2,pass] = travel2(V(v),R(index1),R(index2),Kind_of_link(index1,index2));
                     
                     if value==1 % if trip is feasible
                             
@@ -108,6 +109,7 @@ for v=1:num_v % for each vehicle do:
                             T(tot).order = 1;
                             T(tot).status = 0;
                             T(tot).size = 2;
+                            T(tot).pass = pass;
                             cost_edge(v,tot) = cost; % we save the travel cost of the edge
                             c_t_edge(v,tot) = c_t_1+c_t_2;
 %                             trip2_idx(kk) = kk;
