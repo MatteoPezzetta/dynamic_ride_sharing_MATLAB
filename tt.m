@@ -9,6 +9,6 @@
 
 function travel_time = tt(orgn,dest)
     vel_k = 0.08;
-    d = norm(orgn-dest);
+    d = norm((orgn-dest),1);
     travel_time = vel_k*d;
 end
